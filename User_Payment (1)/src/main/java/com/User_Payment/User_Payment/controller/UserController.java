@@ -59,6 +59,15 @@ public class UserController {
 //                })
 //                .orElse(null);
 //    }
+       @PutMapping("/users/{id}")
+   public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+       return userRepository.findById(id)
+               .map(user -> {
+                   user.setName(updatedUser.getName());
+                   return userRepository.save(user);
+               })
+               .orElse(null);
+   }
 
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable Long id) {
