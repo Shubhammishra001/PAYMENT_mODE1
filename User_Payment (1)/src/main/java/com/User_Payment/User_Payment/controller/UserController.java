@@ -49,6 +49,22 @@ public class UserController {
     public User createUser(@RequestBody User user) {
         return userRepository.save(user);
     }
+    
+@PutMapping("/users/{id}")
+public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+    Optional<User> userOptional = userRepository.findById(id);
+
+    if (userOptional.isPresent()) {
+        User user = userOptional.get();
+        user.setName(updatedUser.getName());
+        // Update 
+        userRepository.save(user);
+        return user;
+    } else {
+       
+        throw new ResourceNotFoundException("User not found with id: " + id);
+    }
+}
 
 //    @PutMapping("/users/{id}")
 //    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
@@ -59,15 +75,15 @@ public class UserController {
 //                })
 //                .orElse(null);
 //    }
-       @PutMapping("/users/{id}")
-   public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-       return userRepository.findById(id)
-               .map(user -> {
-                   user.setName(updatedUser.getName());
-                   return userRepository.save(user);
-               })
-               .orElse(null);
-   }
+   //     @PutMapping("/users/{id}")
+   // public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+   //     return userRepository.findById(id)
+   //             .map(user -> {
+   //                 user.setName(updatedUser.getName());
+   //                 return userRepository.save(user);
+   //             })
+   //             .orElse(null);
+   // }
 
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable Long id) {
